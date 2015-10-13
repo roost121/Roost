@@ -15,6 +15,7 @@
     <string name="details_saturday">Saturday</string>
     <string name="details_alarm_tone">Alarm Tone</string>
     <string name="details_alarm_tone_default">Select an alarm tone</string>
+    <string name="title_activity_collection_demo">CollectionDemoActivity</string>
 
 </resources>
 
