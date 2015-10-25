@@ -123,6 +123,17 @@ public class AlarmDetailsActivity extends AppCompatActivity {
 
         if (id == R.id.action_save_alarm_details) {
             updateModelFromLayout();
+
+            AlarmDBHelper dbHelper = new AlarmDBHelper(this);
+            if (alarmDetails.id < 0) {
+                dbHelper.createAlarm(alarmDetails);
+            }
+
+            else {
+                dbHelper.updateAlarm(alarmDetails);
+            }
+
+            setResult(RESULT_OK);
             finish();
         }
 

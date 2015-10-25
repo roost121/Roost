@@ -5,6 +5,8 @@ import android.provider.BaseColumns;
 /**
  * Created by cpurcella on 10/9/15.
  */
+
+/* Column names for the sqlite table that will hold the alarms */
 public final class AlarmContract {
 
     public AlarmContract() {}
