@@ -1,15 +1,10 @@
 package com.example.purcella_chan.roost;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.content.DialogInterface.OnClickListener;
-
-import static com.example.purcella_chan.roost.AlarmDBHelper.*;
 
 
 public class AlarmListActivity extends AppCompatActivity {
@@ -45,8 +40,10 @@ public class AlarmListActivity extends AppCompatActivity {
     }
 
     public void startAlarmDetailsActivity(long id) {
+        //Intent object provides runtime binding between AlarmListActivity and AlarmDetailsActivity
         Intent intent = new Intent(this, AlarmDetailsActivity.class);
         intent.putExtra("id", id);
+        //Starts the activity specified by the intent (go to AlarmDetailsActivity)
         startActivityForResult(intent, 0);
     }
 

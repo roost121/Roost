@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 
-import java.sql.SQLClientInfoException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +14,7 @@ import java.util.List;
  * Created by cpurcella on 10/9/15.
  */
 
-/* Defines the method the app will use to interact with the sqlite database
+/* Defines the method the app will use to interact with(create and update)the sqlite database
    that holds all of the user's alarms.
  */
 public class AlarmDBHelper extends SQLiteOpenHelper {
@@ -23,7 +22,7 @@ public class AlarmDBHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "alarmclock.db";
 
-    // Create a sql string that will create a databse with all of the necessary columns
+    // Create a sql string that will create a database with all of the necessary columns
     private static final String SQL_CREATE_ALARM = "CREATE TABLE IF NOT EXISTS " + AlarmContract.Alarm.TABLE_NAME + " ( " +
             AlarmContract.Alarm._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +    // Automatically increment the databse version
             AlarmContract.Alarm.COLUMN_NAME_ALARM_NAME + " TEXT, " +
@@ -52,6 +51,7 @@ public class AlarmDBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    //Helper methods used in CRUD operations
     private AlarmModel populateModel(Cursor c) {
         AlarmModel model = new AlarmModel();
         model.id = c.getLong(c.getColumnIndex(AlarmContract.Alarm._ID));

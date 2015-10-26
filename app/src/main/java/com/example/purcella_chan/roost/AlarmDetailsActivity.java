@@ -83,9 +83,12 @@ public class AlarmDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_alarm_details);
         android.support.v7.app.ActionBar mActionBar = getSupportActionBar();
         mActionBar.setTitle("Add An Alarm");
+        //Allow user to navigate back up to AlarmListACtivity(home)
         mActionBar.setDisplayHomeAsUpEnabled(true);
 
         alarmDetails = new AlarmModel();
+
+        //Define onclick handler for ringToneContainer (container menu pops out)
         final LinearLayout ringToneContainer = (LinearLayout) findViewById(R.id.alarm_ringtone_container);
         ringToneContainer.setOnClickListener(new View.OnClickListener() {
 
@@ -107,43 +110,36 @@ public class AlarmDetailsActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        if (id == android.R.id.home) {
-            NavUtils.navigateUpFromSameTask(this);
-            return true;
-        }
-
-        if (id == R.id.action_save_alarm_details) {
-            updateModelFromLayout();
-
-            AlarmDBHelper dbHelper = new AlarmDBHelper(this);
-            if (alarmDetails.id < 0) {
-                dbHelper.createAlarm(alarmDetails);
+        // automatically handle clicks on the Home/Up button, so long as you specify a parent activity in AndroidManifest.xml.
+        // Also handles clicks to save button, creating or updating an alarm in the database
+        switch (item.getItemId()) {
+            case android.R.id.home: {
+                finish();
+                break;
             }
+            case R.id.action_save_alarm_details: {
+                updateModelFromLayout();
 
-            else {
-                dbHelper.updateAlarm(alarmDetails);
+                AlarmDBHelper dbHelper = new AlarmDBHelper(this);
+                if (alarmDetails.id < 0) {
+                    dbHelper.createAlarm(alarmDetails);
+                } else {
+                    dbHelper.updateAlarm(alarmDetails);
+                }
+
+                finish();
             }
-
-            setResult(RESULT_OK);
-            finish();
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    //Gets the URI of the ringtone selected, storing it in the model
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+            super.onActivityResult(requestCode, resultCode, data);
 
+        //Code inside if statement runs if a ringtone is selected
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case 1: {

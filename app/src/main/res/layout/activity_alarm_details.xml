@@ -211,6 +211,7 @@
                 android:layout_alignParentRight="true"
                 android:checked="true" />
 
+            <!-- Menu that pops out when clicked, for user to select ringtone-->
             <LinearLayout
                 android:id="@+id/alarm_ringtone_container"
                 android:layout_width="match_parent"
@@ -220,6 +221,7 @@
                 android:background="@drawable/view_touch_selector"
                 android:orientation="vertical" >
 
+                <!-- 2 textviews -->
                 <TextView
                     android:id="@+id/alarm_label_tone"
                     android:layout_width="wrap_content"
