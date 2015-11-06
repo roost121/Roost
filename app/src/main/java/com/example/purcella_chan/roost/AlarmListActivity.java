@@ -1,6 +1,8 @@
 package com.example.purcella_chan.roost;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +19,7 @@ public class AlarmListActivity extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm_list);
+        //android.support.v7.app.ActionBar mActionBar = getSupportActionBar();
         refreshAlarms();
 
     }
@@ -79,6 +82,30 @@ public class AlarmListActivity extends ListActivity {
 
         mAdapter.setAlarms(dbHelper.getAlarms());
         mAdapter.notifyDataSetChanged();
+    }
+
+    public void deleteAlarm(long id) {
+        final long alarmId = id;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Please confirm")
+                .setTitle("Delete set?")
+                .setCancelable(true)
+                .setNegativeButton("Cancel", null)
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Cancel Alarms
+                        //AlarmManagerHelper.cancelAlarms(mContext);
+                        //Delete alarm from DB by id
+                        dbHelper.deleteAlarm(alarmId);
+                        //Refresh the list of the alarms in the adaptor
+                        mAdapter.setAlarms(dbHelper.getAlarms());
+                        //Notify the adapter the data has changed
+                        mAdapter.notifyDataSetChanged();
+                        //Set the alarms
+                        //AlarmManagerHelper.setAlarms(mContext);
+                    }
+                }).show();
     }
 
 

@@ -99,6 +99,15 @@ public class AlarmListAdapter extends BaseAdapter {
             }
         });
 
+        final View finalView = view;
+        view.setOnLongClickListener(new OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                ((AlarmListActivity) mContext).deleteAlarm((Long) finalView.getTag());
+                return true;
+            }
+        });
+
         return view;
     }
 
