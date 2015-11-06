@@ -132,7 +132,8 @@ public class AlarmDBHelper extends SQLiteOpenHelper {
     public List<AlarmModel> getAlarms() {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String select = "SELECT * FROM " + AlarmContract.Alarm.TABLE_NAME;
+        String select = "SELECT * FROM " + AlarmContract.Alarm.TABLE_NAME + " ORDER BY " +
+                AlarmContract.Alarm.COLUMN_NAME_ALARM_TIME_HOUR + ", " + AlarmContract.Alarm.COLUMN_NAME_ALARM_TIME_MINUTE;
 
         Cursor c = db.rawQuery(select, null);
 
