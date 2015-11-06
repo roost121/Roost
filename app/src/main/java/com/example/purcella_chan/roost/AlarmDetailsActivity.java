@@ -83,7 +83,7 @@ public class AlarmDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_alarm_details);
         android.support.v7.app.ActionBar mActionBar = getSupportActionBar();
         mActionBar.setTitle("Add An Alarm");
-        //Allow user to navigate back up to AlarmListACtivity(home)
+        //Allow user to navigate back up to AlarmListActivity(home)
         mActionBar.setDisplayHomeAsUpEnabled(true);
 
         alarmDetails = new AlarmModel();
@@ -121,7 +121,7 @@ public class AlarmDetailsActivity extends AppCompatActivity {
                 updateModelFromLayout();
 
                 AlarmDBHelper dbHelper = new AlarmDBHelper(this);
-                if (alarmDetails.id < 0) {
+                if (alarmDetails.id == 0) {
                     dbHelper.createAlarm(alarmDetails);
                 } else {
                     dbHelper.updateAlarm(alarmDetails);

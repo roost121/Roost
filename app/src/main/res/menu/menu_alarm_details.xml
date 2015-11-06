@@ -9,6 +9,7 @@
         android:id="@+id/action_save_alarm_details"
         android:orderInCategory="100"
         android:icon="@mipmap/action_save_alarm_details"
+        android:title="@string/hello_world"
         app:showAsAction="always"/>
 
 </menu>

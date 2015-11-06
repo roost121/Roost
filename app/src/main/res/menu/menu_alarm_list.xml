@@ -8,5 +8,6 @@
         android:icon="@mipmap/add"
         app:showAsAction="always"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:title="@string/add_alarm_button_alarm_list"/>
 </menu>

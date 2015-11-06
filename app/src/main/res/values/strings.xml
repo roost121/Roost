@@ -16,6 +16,7 @@
     <string name="details_alarm_tone">Alarm Tone</string>
     <string name="details_alarm_tone_default">Select an alarm tone</string>
     <string name="title_activity_collection_demo">CollectionDemoActivity</string>
+    <string name="add_alarm_button_alarm_list">Add Alarm</string>
 
 </resources>
 

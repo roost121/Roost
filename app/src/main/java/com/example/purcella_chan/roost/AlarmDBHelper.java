@@ -136,8 +136,10 @@ public class AlarmDBHelper extends SQLiteOpenHelper {
 
         Cursor c = db.rawQuery(select, null);
 
+        System.out.print ("hey");
         List<AlarmModel> alarmList = new ArrayList<AlarmModel>();
 
+        System.out.print ("ho");
         while (c.moveToNext()) {
             alarmList.add(populateModel(c));
         }
@@ -145,8 +147,8 @@ public class AlarmDBHelper extends SQLiteOpenHelper {
         if (!alarmList.isEmpty()) {
             return alarmList;
         }
+        return alarmList;
 
-        return null;
     }
 
 

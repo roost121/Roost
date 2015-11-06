@@ -1,5 +1,6 @@
 package com.example.purcella_chan.roost;
 
+import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,7 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class AlarmListActivity extends AppCompatActivity {
+public class AlarmListActivity extends ListActivity {
 
     private AlarmListAdapter mAdapter;
     private AlarmDBHelper dbHelper = new AlarmDBHelper(this);
@@ -16,6 +17,20 @@ public class AlarmListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm_list);
+        refreshAlarms();
+
+    }
+
+    @Override
+    public void onResume()
+    {  // After a pause OR at startup
+        super.onResume();
+        refreshAlarms();
+    }
+    public void refreshAlarms() {
+        mAdapter = new AlarmListAdapter(this, dbHelper.getAlarms());
+
+        setListAdapter(mAdapter);
     }
 
     @Override
@@ -44,7 +59,7 @@ public class AlarmListActivity extends AppCompatActivity {
         Intent intent = new Intent(this, AlarmDetailsActivity.class);
         intent.putExtra("id", id);
         //Starts the activity specified by the intent (go to AlarmDetailsActivity)
-        startActivityForResult(intent, 0);
+        startActivityForResult(intent, RESULT_OK);
     }
 
     @Override
