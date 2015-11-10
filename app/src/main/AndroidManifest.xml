@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.purcella_chan.roost" >
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -22,6 +23,13 @@
             android:parentActivityName=".AlarmListActivity"
             android:windowSoftInputMode="stateHidden" >
         </activity>
+        <receiver android:name="com.example.purcella_chan.roost.AlarmManagerHelper">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <service android:name="com.example.purcella_chan.roost.AlarmService" android:enabled="true"/>
     </application>
 
 </manifest>
+

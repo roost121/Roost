@@ -1,17 +1,13 @@
 package com.example.purcella_chan.roost;
 
-import android.app.ActionBar;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.RingtoneManager;
-import android.support.v4.app.NavUtils;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -19,10 +15,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import static android.media.RingtoneManager.*;
+import static android.media.RingtoneManager.ACTION_RINGTONE_PICKER;
 
 public class AlarmDetailsActivity extends AppCompatActivity {
-
+    private AlarmDBHelper dbHelper = new AlarmDBHelper(this);
     private AlarmModel alarmDetails;
 
     private void updateModelFromLayout() {
@@ -120,13 +116,17 @@ public class AlarmDetailsActivity extends AppCompatActivity {
             case R.id.action_save_alarm_details: {
                 updateModelFromLayout();
 
-                AlarmDBHelper dbHelper = new AlarmDBHelper(this);
+                /*Alarms must be cancelled before they are updated in db, otherwise their changed state will not
+                  match the pending intents*/
+                AlarmManagerHelper.cancelAlarms(this);
                 if (alarmDetails.id == 0) {
                     dbHelper.createAlarm(alarmDetails);
                 } else {
                     dbHelper.updateAlarm(alarmDetails);
                 }
 
+                AlarmManagerHelper.setAlarms(this);
+                setResult(RESULT_OK);
                 finish();
             }
         }

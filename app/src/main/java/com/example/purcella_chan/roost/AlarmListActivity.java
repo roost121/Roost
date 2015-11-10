@@ -5,7 +5,6 @@ import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -76,12 +75,13 @@ public class AlarmListActivity extends ListActivity {
     }
 
     public void setAlarmEnabled(long id, boolean isEnabled) {
+        AlarmManagerHelper.cancelAlarms(this);
+
         AlarmModel model = dbHelper.getAlarm(id);
         model.isEnabled = isEnabled;
         dbHelper.updateAlarm(model);
 
-        mAdapter.setAlarms(dbHelper.getAlarms());
-        mAdapter.notifyDataSetChanged();
+        AlarmManagerHelper.setAlarms(this);
     }
 
     public void deleteAlarm(long id) {
