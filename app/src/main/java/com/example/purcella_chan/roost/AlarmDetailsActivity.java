@@ -56,6 +56,8 @@ public class AlarmDetailsActivity extends AppCompatActivity {
 
         alarmDetails.isEnabled = true;
 
+        System.out.print("enabled");
+
         edtName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {

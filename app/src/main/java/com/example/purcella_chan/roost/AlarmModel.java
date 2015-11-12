@@ -45,6 +45,7 @@ public class AlarmModel {
     public boolean getRepeatingDay(int dayOfWeek) {
         return repeatingDays[dayOfWeek];
     }
+
 }
 
 

@@ -24,7 +24,7 @@ public class AlarmDBHelper extends SQLiteOpenHelper {
 
     // Create a sql string that will create a database with all of the necessary columns
     private static final String SQL_CREATE_ALARM = "CREATE TABLE IF NOT EXISTS " + AlarmContract.Alarm.TABLE_NAME + " ( " +
-            AlarmContract.Alarm._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +    // Automatically increment the databse version
+            AlarmContract.Alarm._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +    // Automatically increment the database version
             AlarmContract.Alarm.COLUMN_NAME_ALARM_NAME + " TEXT, " +
             AlarmContract.Alarm.COLUMN_NAME_ALARM_TIME_HOUR + " INTEGER, " +
             AlarmContract.Alarm.COLUMN_NAME_ALARM_TIME_MINUTE + " INTEGER, " +
@@ -79,6 +79,7 @@ public class AlarmDBHelper extends SQLiteOpenHelper {
         values.put(AlarmContract.Alarm.COLUMN_NAME_ALARM_TIME_HOUR, model.timeHour);
         values.put(AlarmContract.Alarm.COLUMN_NAME_ALARM_TIME_MINUTE, model.timeMinute);
         values.put(AlarmContract.Alarm.COLUMN_NAME_REPEAT_WEEKLY, model.repeatWeekly);
+        values.put(AlarmContract.Alarm.COLUMN_NAME_ALARM_ENABLED, model.isEnabled);
         /* try {
              toneString = model.alarmTone.toString();
         }

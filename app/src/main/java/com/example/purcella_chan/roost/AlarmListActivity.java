@@ -2,11 +2,14 @@ package com.example.purcella_chan.roost;
 
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.app.ListFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.Window;
 
 
 public class AlarmListActivity extends ListActivity {
@@ -17,11 +20,13 @@ public class AlarmListActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_ACTION_BAR);
         setContentView(R.layout.activity_alarm_list);
         //android.support.v7.app.ActionBar mActionBar = getSupportActionBar();
         refreshAlarms();
-
     }
+
+
 
     @Override
     public void onResume()
@@ -37,7 +42,6 @@ public class AlarmListActivity extends ListActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_alarm_list, menu);
         return true;
     }
@@ -88,7 +92,7 @@ public class AlarmListActivity extends ListActivity {
         final long alarmId = id;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Please confirm")
-                .setTitle("Delete set?")
+                .setTitle("Delete alarm?")
                 .setCancelable(true)
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
