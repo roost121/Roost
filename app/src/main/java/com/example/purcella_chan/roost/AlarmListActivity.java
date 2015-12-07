@@ -3,26 +3,39 @@ package com.example.purcella_chan.roost;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ListFragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
+import android.widget.ListView;
+
+import com.example.purcella_chan.roost.AlarmDBHelper;
+import com.example.purcella_chan.roost.AlarmListAdapter;
+import com.example.purcella_chan.roost.AlarmManagerHelper;
+import com.example.purcella_chan.roost.AlarmModel;
+import com.example.purcella_chan.roost.R;
 
 
-public class AlarmListActivity extends ListActivity {
+public class AlarmListActivity extends AppCompatActivity {
 
     private AlarmListAdapter mAdapter;
+    private ListView listView;
     private AlarmDBHelper dbHelper = new AlarmDBHelper(this);
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_ACTION_BAR);
+        super.onCreate(savedInstanceState);
+        mContext = this;
         setContentView(R.layout.activity_alarm_list);
-        //android.support.v7.app.ActionBar mActionBar = getSupportActionBar();
+        listView = (ListView) findViewById(R.id.id_list);
+        mAdapter = new AlarmListAdapter(this, dbHelper.getAlarms());
         refreshAlarms();
     }
 
@@ -37,13 +50,14 @@ public class AlarmListActivity extends ListActivity {
     public void refreshAlarms() {
         mAdapter = new AlarmListAdapter(this, dbHelper.getAlarms());
 
-        setListAdapter(mAdapter);
+        listView.setAdapter(mAdapter);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_alarm_list, menu);
-        return true;
+
+        return (super.onCreateOptionsMenu(menu));
     }
 
 

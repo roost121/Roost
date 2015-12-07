@@ -80,12 +80,7 @@ public class AlarmDBHelper extends SQLiteOpenHelper {
         values.put(AlarmContract.Alarm.COLUMN_NAME_ALARM_TIME_MINUTE, model.timeMinute);
         values.put(AlarmContract.Alarm.COLUMN_NAME_REPEAT_WEEKLY, model.repeatWeekly);
         values.put(AlarmContract.Alarm.COLUMN_NAME_ALARM_ENABLED, model.isEnabled);
-        /* try {
-             toneString = model.alarmTone.toString();
-        }
-        catch (NullPointerException e) {
-            toneString = "";
-        } */
+
         values.put(AlarmContract.Alarm.COLUMN_NAME_ALARM_TONE, model.alarmTone.toString());
         // toString fails with a null pointer exception when we try to call it without a value.
 
@@ -104,6 +99,7 @@ public class AlarmDBHelper extends SQLiteOpenHelper {
         return getWritableDatabase().insert(AlarmContract.Alarm.TABLE_NAME, null, values);
     }
 
+    // Pull single alarm from SQLite
     public AlarmModel getAlarm(long id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -119,17 +115,20 @@ public class AlarmDBHelper extends SQLiteOpenHelper {
         return null;
     }
 
+    // Get alarm by ID and update it in SQLite
     public long updateAlarm(AlarmModel model) {
         ContentValues values = populateContent(model);
         return getWritableDatabase().update(AlarmContract.Alarm.TABLE_NAME, values, AlarmContract.Alarm._ID
                 + " = ?", new String[]{String.valueOf(model.id)});
     }
 
+    // Get alarm by ID and delete it from SQLite
     public int deleteAlarm(long id) {
         return getWritableDatabase().delete(AlarmContract.Alarm.TABLE_NAME, AlarmContract.Alarm._ID
                 + " = ?", new String[]{String.valueOf(id)});
     }
 
+    // Pull all alarms from SQLite and store in a list of Alarms
     public List<AlarmModel> getAlarms() {
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -138,10 +137,8 @@ public class AlarmDBHelper extends SQLiteOpenHelper {
 
         Cursor c = db.rawQuery(select, null);
 
-        System.out.print ("hey");
         List<AlarmModel> alarmList = new ArrayList<AlarmModel>();
 
-        System.out.print ("ho");
         while (c.moveToNext()) {
             alarmList.add(populateModel(c));
         }

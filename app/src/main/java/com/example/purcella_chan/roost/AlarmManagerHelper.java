@@ -1,5 +1,6 @@
 package com.example.purcella_chan.roost;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -15,6 +16,12 @@ import java.util.List;
 public class AlarmManagerHelper extends BroadcastReceiver {
 
 
+    public static final String ID = "id";
+    public static final String NAME = "name";
+    public static final String TIME_HOUR = "timeHour";
+    public static final String TIME_MINUTE = "timeMinute";
+    public static final String TONE = "alarmTone";
+
     @Override
     public void onReceive(Context context, Intent intent){
         setAlarms(context);
@@ -24,6 +31,7 @@ public class AlarmManagerHelper extends BroadcastReceiver {
         cancelAlarms(context);
         AlarmDBHelper dbHelper = new AlarmDBHelper(context);
         List<AlarmModel> alarms = dbHelper.getAlarms();
+
 
         for(AlarmModel alarm : alarms) {
             if(alarm.isEnabled) {
@@ -68,6 +76,7 @@ public class AlarmManagerHelper extends BroadcastReceiver {
         }
     }
 
+    @SuppressLint("NewApi")
     public static void setAlarm(Context context, Calendar calendar, PendingIntent pIntent){
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT){

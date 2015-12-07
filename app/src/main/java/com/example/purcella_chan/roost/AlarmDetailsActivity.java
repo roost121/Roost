@@ -1,3 +1,4 @@
+
 package com.example.purcella_chan.roost;
 
 import android.app.Activity;
@@ -8,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -15,58 +17,46 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import org.w3c.dom.Text;
+
 import static android.media.RingtoneManager.ACTION_RINGTONE_PICKER;
 
 public class AlarmDetailsActivity extends AppCompatActivity {
     private AlarmDBHelper dbHelper = new AlarmDBHelper(this);
     private AlarmModel alarmDetails;
 
+    private TimePicker timePicker;
+    private EditText editName;
+    private CheckBox chkWeekly;
+    private CheckBox chkSunday;
+    private CheckBox chkMonday;
+    private CheckBox chkTuesday;
+    private CheckBox chkWednesday;
+    private CheckBox chkThursday;
+    private CheckBox chkFriday;
+    private CheckBox chkSaturday;
+    private TextView txtToneSelection;
+
     private void updateModelFromLayout() {
-
-        TimePicker timePicker = (TimePicker) findViewById(R.id.alarm_details_time_picker);
-        alarmDetails.timeMinute = timePicker.getMinute();
-        alarmDetails.timeHour = timePicker.getHour();
-
-        EditText edtName = (EditText) findViewById(R.id.alarm_details_name);
-        alarmDetails.name = edtName.getText().toString();
-
-        CheckBox chkWeekly = (CheckBox) findViewById(R.id.alarm_details_repeat_weekly);
+        alarmDetails.timeMinute = timePicker.getCurrentMinute().intValue();
+        alarmDetails.timeHour = timePicker.getCurrentHour().intValue();
+        alarmDetails.name = editName.getText().toString();
         alarmDetails.repeatWeekly = chkWeekly.isChecked();
-
-        CheckBox chkSunday = (CheckBox) findViewById(R.id.alarm_details_repeat_sunday);
         alarmDetails.setRepeatingDay(AlarmModel.SUNDAY, chkSunday.isChecked());
-
-        CheckBox chkMonday = (CheckBox) findViewById(R.id.alarm_details_repeat_monday);
         alarmDetails.setRepeatingDay(AlarmModel.MONDAY, chkMonday.isChecked());
-
-        CheckBox chkTuesday = (CheckBox) findViewById(R.id.alarm_details_repeat_tuesday);
         alarmDetails.setRepeatingDay(AlarmModel.TUESDAY, chkTuesday.isChecked());
-
-        CheckBox chkWednesday = (CheckBox) findViewById(R.id.alarm_details_repeat_wednesday);
         alarmDetails.setRepeatingDay(AlarmModel.WEDNESDAY, chkWednesday.isChecked());
-
-        CheckBox chkThursday = (CheckBox) findViewById(R.id.alarm_details_repeat_thursday);
         alarmDetails.setRepeatingDay(AlarmModel.THURSDAY, chkThursday.isChecked());
-
-        CheckBox chkFriday = (CheckBox) findViewById(R.id.alarm_details_repeat_friday);
         alarmDetails.setRepeatingDay(AlarmModel.FRIDAY, chkFriday.isChecked());
-
-        CheckBox chkSaturday = (CheckBox) findViewById(R.id.alarm_details_repeat_saturday);
         alarmDetails.setRepeatingDay(AlarmModel.SATURDAY, chkSaturday.isChecked());
-
         alarmDetails.isEnabled = true;
-
-        System.out.print("enabled");
-
-        edtName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    hideKeyboard(v);
-                }
-            }
-        });
     }
+
+
+    /*
+     *
+     * @param view
+     */
 
     public void hideKeyboard(View view) {
         InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -77,22 +67,58 @@ public class AlarmDetailsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_ACTION_BAR);
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_alarm_details);
+
         android.support.v7.app.ActionBar mActionBar = getSupportActionBar();
         mActionBar.setTitle("Add An Alarm");
         //Allow user to navigate back up to AlarmListActivity(home)
-        mActionBar.setDisplayHomeAsUpEnabled(true);
+        mActionBar.setDisplayHomeAsUpEnabled(true);;
 
-        alarmDetails = new AlarmModel();
+        timePicker = (TimePicker) findViewById(R.id.alarm_details_time_picker);
+        editName = (EditText) findViewById(R.id.alarm_details_name);
+        chkWeekly = (CheckBox) findViewById(R.id.alarm_details_repeat_weekly);
+        chkSunday = (CheckBox) findViewById(R.id.alarm_details_repeat_sunday);
+        chkMonday = (CheckBox) findViewById(R.id.alarm_details_repeat_monday);
+        chkTuesday = (CheckBox) findViewById(R.id.alarm_details_repeat_tuesday);
+        chkWednesday = (CheckBox) findViewById(R.id.alarm_details_repeat_wednesday);
+        chkThursday = (CheckBox) findViewById(R.id.alarm_details_repeat_thursday);
+        chkFriday = (CheckBox) findViewById(R.id.alarm_details_repeat_friday);
+        chkSaturday = (CheckBox) findViewById(R.id.alarm_details_repeat_saturday);
+        txtToneSelection = (TextView) findViewById(R.id.alarm_label_tone_selection);
 
-        //Define onclick handler for ringToneContainer (container menu pops out)
+        long id = getIntent().getExtras().getLong("id");
+
+        if (id == -1) {
+            alarmDetails = new AlarmModel();
+        } else {
+            alarmDetails = dbHelper.getAlarm(id);
+
+            timePicker.setCurrentMinute(alarmDetails.timeMinute);
+            timePicker.setCurrentHour(alarmDetails.timeHour);
+
+            editName.setText(alarmDetails.name);
+
+            chkWeekly.setChecked(alarmDetails.repeatWeekly);
+            chkSunday.setChecked(alarmDetails.getRepeatingDay(AlarmModel.SUNDAY));
+            chkMonday.setChecked(alarmDetails.getRepeatingDay(AlarmModel.MONDAY));
+            chkTuesday.setChecked(alarmDetails.getRepeatingDay(AlarmModel.TUESDAY));
+            chkWednesday.setChecked(alarmDetails.getRepeatingDay(AlarmModel.WEDNESDAY));
+            chkThursday.setChecked(alarmDetails.getRepeatingDay(AlarmModel.THURSDAY));
+            chkFriday.setChecked(alarmDetails.getRepeatingDay(AlarmModel.FRIDAY));
+            chkSaturday.setChecked(alarmDetails.getRepeatingDay(AlarmModel.SATURDAY));
+
+            txtToneSelection.setText(RingtoneManager.getRingtone(this, alarmDetails.alarmTone).getTitle(this));
+        }
+
         final LinearLayout ringToneContainer = (LinearLayout) findViewById(R.id.alarm_ringtone_container);
         ringToneContainer.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ACTION_RINGTONE_PICKER);
+                Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
                 startActivityForResult(intent , 1);
             }
         });
@@ -107,9 +133,7 @@ public class AlarmDetailsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long as you specify a parent activity in AndroidManifest.xml.
-        // Also handles clicks to save button, creating or updating an alarm in the database
+
         switch (item.getItemId()) {
             case android.R.id.home: {
                 finish();
@@ -118,16 +142,16 @@ public class AlarmDetailsActivity extends AppCompatActivity {
             case R.id.action_save_alarm_details: {
                 updateModelFromLayout();
 
-                /*Alarms must be cancelled before they are updated in db, otherwise their changed state will not
-                  match the pending intents*/
                 AlarmManagerHelper.cancelAlarms(this);
-                if (alarmDetails.id == 0) {
+
+                if (alarmDetails.id < 0) {
                     dbHelper.createAlarm(alarmDetails);
                 } else {
                     dbHelper.updateAlarm(alarmDetails);
                 }
 
                 AlarmManagerHelper.setAlarms(this);
+
                 setResult(RESULT_OK);
                 finish();
             }
@@ -136,18 +160,14 @@ public class AlarmDetailsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    //Gets the URI of the ringtone selected, storing it in the model
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-            super.onActivityResult(requestCode, resultCode, data);
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-        //Code inside if statement runs if a ringtone is selected
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case 1: {
                     alarmDetails.alarmTone = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
-
-                    TextView txtToneSelection = (TextView) findViewById(R.id.alarm_label_tone_selection);
                     txtToneSelection.setText(RingtoneManager.getRingtone(this, alarmDetails.alarmTone).getTitle(this));
                     break;
                 }
@@ -158,3 +178,4 @@ public class AlarmDetailsActivity extends AppCompatActivity {
         }
     }
 }
+
