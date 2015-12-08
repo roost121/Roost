@@ -25,12 +25,13 @@
             android:parentActivityName=".AlarmListActivity"
             android:windowSoftInputMode="stateHidden" >
         </activity>
+        <activity android:name=".AlarmScreen" />
+        <service android:name="com.example.purcella_chan.roost.AlarmService" android:enabled="true"/>
         <receiver android:name="com.example.purcella_chan.roost.AlarmManagerHelper">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <service android:name="com.example.purcella_chan.roost.AlarmService" android:enabled="true"/>
     </application>
 
 </manifest>

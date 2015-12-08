@@ -15,7 +15,6 @@ import java.util.List;
  */
 public class AlarmManagerHelper extends BroadcastReceiver {
 
-
     public static final String ID = "id";
     public static final String NAME = "name";
     public static final String TIME_HOUR = "timeHour";
@@ -23,24 +22,28 @@ public class AlarmManagerHelper extends BroadcastReceiver {
     public static final String TONE = "alarmTone";
 
     @Override
-    public void onReceive(Context context, Intent intent){
+    public void onReceive(Context context, Intent intent) {
         setAlarms(context);
     }
 
-    public static void setAlarms(Context context){
+    public static void setAlarms(Context context) {
         cancelAlarms(context);
+
         AlarmDBHelper dbHelper = new AlarmDBHelper(context);
-        List<AlarmModel> alarms = dbHelper.getAlarms();
 
+        List<AlarmModel> alarms =  dbHelper.getAlarms();
 
-        for(AlarmModel alarm : alarms) {
-            if(alarm.isEnabled) {
+        for (AlarmModel alarm : alarms) {
+            if (alarm.isEnabled) {
+
                 PendingIntent pIntent = createPendingIntent(context, alarm);
+
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(Calendar.HOUR_OF_DAY, alarm.timeHour);
-                calendar.set(Calendar.MINUTE, alarm.timeHour);
+                calendar.set(Calendar.MINUTE, alarm.timeMinute);
                 calendar.set(Calendar.SECOND, 00);
 
+                //Find next time to set
                 final int nowDay = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
                 final int nowHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
                 final int nowMinute = Calendar.getInstance().get(Calendar.MINUTE);
@@ -77,40 +80,39 @@ public class AlarmManagerHelper extends BroadcastReceiver {
     }
 
     @SuppressLint("NewApi")
-    public static void setAlarm(Context context, Calendar calendar, PendingIntent pIntent){
-        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT){
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),pIntent);
-        }
-        else{
+    private static void setAlarm(Context context, Calendar calendar, PendingIntent pIntent) {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pIntent);
+        } else {
             alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pIntent);
         }
     }
 
-    public static void cancelAlarms(Context context){
+    public static void cancelAlarms(Context context) {
         AlarmDBHelper dbHelper = new AlarmDBHelper(context);
-        List<AlarmModel> alarms = dbHelper.getAlarms();
-        if(alarms != null){
-            for(AlarmModel alarm : alarms){
-                if(alarm.isEnabled){
+
+        List<AlarmModel> alarms =  dbHelper.getAlarms();
+
+        if (alarms != null) {
+            for (AlarmModel alarm : alarms) {
+                if (alarm.isEnabled) {
                     PendingIntent pIntent = createPendingIntent(context, alarm);
-                    AlarmManager alarmManager = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
+
+                    AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
                     alarmManager.cancel(pIntent);
                 }
             }
         }
     }
 
-    /*Method that creates pending intents to set and cancel alarms. Pending intent = intent that
-      persists outside of app */
-    private static PendingIntent createPendingIntent(Context context, AlarmModel model){
+    private static PendingIntent createPendingIntent(Context context, AlarmModel model) {
         Intent intent = new Intent(context, AlarmService.class);
-        //adding data to intent to be passed to service
-        intent.putExtra("id", model.id);
-        intent.putExtra("name", model.name);
-        intent.putExtra("timeHour", model.timeHour);
-        intent.putExtra("timeMinute", model.timeMinute);
-        intent.putExtra("alarmTone", model.alarmTone);
+        intent.putExtra(ID, model.id);
+        intent.putExtra(NAME, model.name);
+        intent.putExtra(TIME_HOUR, model.timeHour);
+        intent.putExtra(TIME_MINUTE, model.timeMinute);
+        intent.putExtra(TONE, model.alarmTone.toString());
 
         return PendingIntent.getService(context, (int) model.id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
